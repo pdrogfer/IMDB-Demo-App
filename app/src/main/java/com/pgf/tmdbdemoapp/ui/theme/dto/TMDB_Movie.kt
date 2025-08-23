@@ -1,5 +1,7 @@
 package com.pgf.tmdbdemoapp.ui.theme.dto
 
+import kotlinx.serialization.Serializable
+
 data class GetLatestMoviesResponse(
     val page: Int,
     val results: List<TMDB_Movie>,
@@ -7,6 +9,7 @@ data class GetLatestMoviesResponse(
     val total_results: Int
 )
 
+@Serializable
 data class TMDB_Movie(
     val id: Int,
     val title: String,

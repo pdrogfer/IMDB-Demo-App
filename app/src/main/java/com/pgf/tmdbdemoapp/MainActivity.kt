@@ -6,6 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,18 +28,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import com.pgf.tmdbdemoapp.navigation.Screen
 import com.pgf.tmdbdemoapp.ui.theme.TMDBDemoAppTheme
 import com.pgf.tmdbdemoapp.ui.theme.dto.TMDB_Movie
 import kotlin.getValue
 
 /*
 * 1. make UI for both list and detail views, with fake data from viewmodel -> done
-* 2. add new navigation 3 list and detail views
+* 2. add new Navigation 3 for list and detail views -> done
 * 3. make view model get data from repository -> done
 * add dependency injection with Hilt
 * 4. make repository get data from retrofit client -> done
@@ -63,6 +72,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val backStack = rememberNavBackStack<Screen>(Screen.MovieListScreen)
+
             TMDBDemoAppTheme {
                 val movies by viewModel.movies.collectAsState()
                 val selectedMovie by viewModel.movieById.observeAsState()
@@ -75,32 +86,31 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-                    Column {
-                        MovieList(
-                            movies = movies,
-                            modifier = Modifier
-                                .weight(3f)
-                                .padding(innerPadding),
-                            onMovieClick = { id -> viewModel.getMovieById(id) }
-                        )
-
-                        selectedMovie?.let { movie ->
-                            // TODO: navigate to a detail view
-                            MovieDetail(
-                                movie = movie,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(16.dp)
-                            )
-                        } ?: run {
-                            Text(
-                                text = "Select a movie to see details",
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(16.dp)
-                            )
+                    NavDisplay(
+                        backStack = backStack,
+                        entryProvider = { key ->
+                            when (key) {
+                                is Screen.MovieListScreen -> NavEntry(key = key) {
+                                    MovieList(
+                                        movies = movies,
+                                        modifier = Modifier
+                                            .padding(innerPadding),
+                                        navigateToDetail = { route ->
+                                            backStack.add(route)
+                                        }
+                                    )
+                                }
+                                is Screen.MovieDetailScreen -> NavEntry(key = key) {
+                                    MovieDetail(
+                                        movieNav = key,
+                                        modifier = Modifier
+                                            .padding(innerPadding)
+                                    )
+                                }
+                                else -> throw IllegalArgumentException("Unknown key: $key")
+                            }
                         }
-                    }
+                    )
                 }
             }
         }
@@ -110,10 +120,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MovieList(movies: List<TMDB_Movie>, modifier: Modifier = Modifier, onMovieClick: (Int) -> Unit) {
+fun MovieList(movies: List<TMDB_Movie>,
+              modifier: Modifier = Modifier,
+              navigateToDetail: (entry: Screen.MovieDetailScreen) -> Unit = {}) {
     LazyColumn(modifier = modifier) {
         items(movies) { movie ->
-            MovieItem(movie = movie, onClick = { onMovieClick(movie.id) })
+            MovieItem(movie = movie, onClick = {
+                val entry = Screen.MovieDetailScreen(movie)
+                navigateToDetail(entry)
+            })
         }
     }
 }
@@ -136,9 +151,9 @@ fun MovieItem(movie: TMDB_Movie, modifier: Modifier = Modifier, onClick: () -> U
 }
 
 @Composable
-fun MovieDetail(movie: TMDB_Movie, modifier: Modifier = Modifier) {
+fun MovieDetail(movieNav: Screen.MovieDetailScreen, modifier: Modifier = Modifier) {
     Text(
-        text = "Title: ${movie.title}\nYear: ${movie.release_date}",
+        text = "Title: ${movieNav.movie.title}\nYear: ${movieNav.movie.release_date}",
         modifier = modifier.padding(16.dp)
     )
 }
@@ -159,9 +174,7 @@ fun PersonListPreview() {
         MovieList(
             movies = previewMovies,
             modifier = Modifier.padding(8.dp),
-            onMovieClick = {
-                Log.d("MovieListPreview", "Clicked on movie with ID: $it")
-            }
+            navigateToDetail = { Log.d("MovieListPreview", "Clicked on movie: ${it.movie.title}") }
         )
     }
 }
