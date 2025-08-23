@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.pgf.imdbdemoapp"
+    namespace = "com.pgf.tmdbdemoapp"
     compileSdk = 36
 
     defaultConfig {
@@ -66,4 +66,13 @@ dependencies {
 
     // Kotlinx Coroutines Test for coroutine testing
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+
+    // OkHttp
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.1.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+
+    // GSON (for JSON parsing)
+    implementation("com.google.code.gson:gson:2.13.1")
 }

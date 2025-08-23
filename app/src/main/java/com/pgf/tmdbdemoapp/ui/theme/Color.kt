@@ -1,4 +1,4 @@
-package com.pgf.imdbdemoapp.ui.theme
+package com.pgf.tmdbdemoapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

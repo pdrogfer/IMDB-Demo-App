@@ -1,4 +1,4 @@
-package com.pgf.imdbdemoapp
+package com.pgf.tmdbdemoapp
 
 import org.junit.Test
 
