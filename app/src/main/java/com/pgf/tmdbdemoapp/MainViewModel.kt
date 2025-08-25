@@ -11,25 +11,20 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(private val moviesRepository: TMDB_MoviesRepository) : ViewModel() {
 
-    // Using MutableStateFlow to hold the list of persons
     private val _movies = MutableStateFlow<List<TMDB_Movie>>(emptyList())
     val movies: StateFlow<List<TMDB_Movie>> = _movies
 
-    // Using LiveData to hold the person-by-id
-    private val _movieById = MutableLiveData<TMDB_Movie?>(null)
-    val movieById: LiveData<TMDB_Movie?> = _movieById
+    var currentPage = 1
+    private var isLoading = false
 
-    fun getMovies() {
+    fun getMovies(page: Int = 1) {
+        if (isLoading) return
+        isLoading = true
         viewModelScope.launch {
-            val movies = moviesRepository.getAll()
-            _movies.value = movies
-        }
-    }
-
-    fun getMovieById(id: Int) {
-        viewModelScope.launch {
-            val movie = moviesRepository.getById(id)
-            _movieById.value = movie
+            val result = moviesRepository.getMovies(page = page)
+            _movies.value = _movies.value + result.results
+            currentPage = page
+            isLoading = false
         }
     }
 }

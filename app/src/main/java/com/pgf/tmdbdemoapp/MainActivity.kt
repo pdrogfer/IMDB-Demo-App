@@ -1,6 +1,7 @@
 package com.pgf.tmdbdemoapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -47,6 +48,7 @@ import kotlin.getValue
 * 8. make viewmodel expose state: loading, error, data
 *
 * - add search functionality -> done
+* - add pagination -> done
 *
 */
 
@@ -114,6 +116,9 @@ class MainActivity : ComponentActivity() {
                                         movies = movies,
                                         modifier = Modifier
                                             .padding(innerPadding),
+                                        getNextPage = {
+                                            viewModel.getMovies(viewModel.currentPage + 1)
+                                        },
                                         navigateToDetail = { route ->
                                             backStack.add(route)
                                         }

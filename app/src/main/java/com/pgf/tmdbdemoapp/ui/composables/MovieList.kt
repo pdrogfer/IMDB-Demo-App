@@ -4,7 +4,10 @@ import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,8 +18,21 @@ import com.pgf.tmdbdemoapp.ui.theme.TMDBDemoAppTheme
 @Composable
 fun MovieList(movies: List<TMDB_Movie>,
               modifier: Modifier = Modifier,
+              getNextPage: () -> Unit = {},
               navigateToDetail: (entry: Screen.MovieDetailScreen) -> Unit = {}) {
-    LazyColumn(modifier = modifier) {
+
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(listState, movies) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collect { lastVisibleItemIndex ->
+                if (lastVisibleItemIndex == movies.size - 1) {
+                    getNextPage()
+                }
+            }
+    }
+
+    LazyColumn(state = listState, modifier = modifier) {
         items(movies) { movie ->
             MovieItem(movie = movie, onClick = {
                 val entry = Screen.MovieDetailScreen(movie)
@@ -28,7 +44,7 @@ fun MovieList(movies: List<TMDB_Movie>,
 
 @Preview(showBackground = true)
 @Composable
-fun PersonListPreview() {
+fun MovieListPreview() {
     TMDBDemoAppTheme {
         val previewMovies = List(20) {
             TMDB_Movie(
