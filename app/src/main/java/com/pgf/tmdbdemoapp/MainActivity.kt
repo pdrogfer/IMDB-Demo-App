@@ -1,7 +1,6 @@
 package com.pgf.tmdbdemoapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,14 +17,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -34,6 +29,7 @@ import com.pgf.tmdbdemoapp.ui.composables.MovieDetail
 import com.pgf.tmdbdemoapp.ui.theme.TMDBDemoAppTheme
 import com.pgf.tmdbdemoapp.ui.composables.MovieList
 import com.pgf.tmdbdemoapp.ui.composables.SearchDialog
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.getValue
 
 /*
@@ -52,18 +48,9 @@ import kotlin.getValue
 *
 */
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MainViewModel by viewModels {
-        object  : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val repository = TMDB_MoviesRepositoryImpl(
-                    RetrofitClient.tmdbApi
-                )
-                @Suppress("UNCHECKED_CAST")
-                return MainViewModel(repository) as T
-            }
-        }
-    }
+    private val viewModel: MainViewModel by viewModels()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

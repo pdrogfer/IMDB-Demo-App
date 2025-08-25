@@ -1,4 +1,4 @@
-package com.pgf.tmdbdemoapp
+package com.pgf.tmdbdemoapp.api
 
 import com.pgf.tmdbdemoapp.dto.GetLatestMoviesResponse
 

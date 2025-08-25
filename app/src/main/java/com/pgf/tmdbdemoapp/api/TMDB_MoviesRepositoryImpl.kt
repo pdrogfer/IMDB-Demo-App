@@ -1,11 +1,12 @@
-package com.pgf.tmdbdemoapp
+package com.pgf.tmdbdemoapp.api
 
 import com.pgf.tmdbdemoapp.dto.GetLatestMoviesResponse
-import com.pgf.tmdbdemoapp.dto.TMDB_Movie
+import dagger.Provides
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class TMDB_MoviesRepositoryImpl(
+class TMDB_MoviesRepositoryImpl @Inject constructor(
     private val apiService: TmdbApiService
 ) : TMDB_MoviesRepository {
 
