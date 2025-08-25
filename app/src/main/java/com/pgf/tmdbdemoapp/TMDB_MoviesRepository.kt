@@ -1,6 +1,6 @@
 package com.pgf.tmdbdemoapp
 
-import com.pgf.tmdbdemoapp.ui.theme.dto.TMDB_Movie
+import com.pgf.tmdbdemoapp.dto.TMDB_Movie
 
 interface TMDB_MoviesRepository {
 

@@ -1,4 +1,4 @@
-package com.pgf.tmdbdemoapp.ui.theme.dto
+package com.pgf.tmdbdemoapp.dto
 
 import kotlinx.serialization.Serializable
 

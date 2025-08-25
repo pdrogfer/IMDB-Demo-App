@@ -1,6 +1,6 @@
 package com.pgf.tmdbdemoapp
 
-import com.pgf.tmdbdemoapp.ui.theme.dto.GetLatestMoviesResponse
+import com.pgf.tmdbdemoapp.dto.GetLatestMoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
