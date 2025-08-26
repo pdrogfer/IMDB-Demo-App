@@ -2,7 +2,7 @@ package com.pgf.tmdbdemoapp.dto
 
 import kotlinx.serialization.Serializable
 
-data class GetLatestMoviesResponse(
+data class GetMoviesResponse(
     val page: Int,
     val results: List<TMDB_Movie>,
     val total_pages: Int,

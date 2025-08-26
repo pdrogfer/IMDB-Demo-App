@@ -21,6 +21,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -68,6 +70,7 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         CenterAlignedTopAppBar(
                             title = { Text(text = "TMDB Movies") },
+                            modifier = Modifier.shadow(8.dp)
                         )
                     },
                     floatingActionButton = {
@@ -102,7 +105,7 @@ class MainActivity : ComponentActivity() {
                                     MovieList(
                                         movies = movies,
                                         modifier = Modifier
-                                            .padding(innerPadding),
+                                            .padding(8.dp),
                                         getNextPage = {
                                             viewModel.getMovies(viewModel.currentPage + 1)
                                         },

@@ -69,6 +69,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // MockK for mocking in tests
+    testImplementation("io.mockk:mockk:1.13.10")
+
     // Turbine for StateFlow testing
     testImplementation("app.cash.turbine:turbine:1.2.1")
 

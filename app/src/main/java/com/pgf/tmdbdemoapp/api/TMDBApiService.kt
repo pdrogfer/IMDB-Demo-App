@@ -1,6 +1,6 @@
 package com.pgf.tmdbdemoapp.api
 
-import com.pgf.tmdbdemoapp.dto.GetLatestMoviesResponse
+import com.pgf.tmdbdemoapp.dto.GetMoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,5 +11,5 @@ interface TmdbApiService {
         @Query("language") language: String = "en-US",
         @Query("sort_by") sortBy: String = "release_date.desc",
         @Query("page") page: Int
-    ): GetLatestMoviesResponse
+    ): GetMoviesResponse
 }
