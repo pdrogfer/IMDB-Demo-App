@@ -105,7 +105,8 @@ class MainActivity : ComponentActivity() {
                                     MovieList(
                                         movies = movies,
                                         modifier = Modifier
-                                            .padding(8.dp),
+                                            .padding(innerPadding)
+                                            .padding(horizontal = 8.dp),
                                         getNextPage = {
                                             viewModel.getMovies(viewModel.currentPage + 1)
                                         },
