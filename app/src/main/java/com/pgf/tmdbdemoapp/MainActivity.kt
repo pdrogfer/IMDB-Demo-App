@@ -39,11 +39,11 @@ import kotlin.getValue
 * 2. add new Navigation 3 for list and detail views -> done
 * 3. make view model get data from repository -> done
 * - show images with Coil -> done
-* 4. add dependency injection with Hilt
+* 4. add dependency injection with Hilt -> done
 * 5. make repository get data from retrofit client -> done
-* 6. add viewmodel tests
-* 7. add UI tests
-* 8. make viewmodel expose state: loading, error, data
+* 6. add viewmodel tests -> done
+* 7. add UI tests -> done
+* 8. make viewmodel expose state: loading, error, data -> not implemented
 *
 * - add search functionality -> done
 * - add pagination -> done
